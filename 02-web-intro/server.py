@@ -3,6 +3,7 @@ import sqlite3
 
 connection = sqlite3.connect("shopping_list.db")
 
+@route('/')
 @route('/list')
 def get_list():
     global connection
