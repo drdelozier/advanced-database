@@ -37,6 +37,20 @@ def add_item(item):
     finally:
         pass
 
+
+def get_item(id):
+    shopping_db = client.shopping_db
+    shopping_list = shopping_db.shopping_list
+    try:
+        item = shopping_list.find_one({"_id":ObjectId(id)})
+    except Exception as e:
+        print(e)
+        item = None
+    if item == None:
+        return None
+    item['id'] = str(item['_id'])
+    return item
+
 def delete_item(id):
     try:
         shopping_db = client.shopping_db

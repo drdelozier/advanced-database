@@ -2,9 +2,6 @@ from bottle import route, run, template, get, post, request, response, redirect
 
 import database
 
-import dataset
-
-db = dataset.connect("sqlite:///shopping_list.db")
 
 @route('/')
 @route('/list')
@@ -17,6 +14,7 @@ def get_list():
 def get_add():
     return template('add_item.tpl')
 
+
 @post("/add")
 def post_add():
     description = request.forms.get("description")
@@ -24,18 +22,20 @@ def post_add():
     database.add_item(description)
     redirect("/")
 
+
 @route("/delete/<id>")
 def get_delete(id):
     database.delete_item(id)
     redirect("/")
 
+
 @route("/edit/<id>")
 def get_edit(id):
-    items = [dict(item) for item in db['list'].find(id=id)]
-    if len(items) != 1:
+    print(id)
+    item = database.get_item(id)
+    if item == None:
         redirect('/')
-    item = items[0]
-    return template('edit_item.tpl', id=item['id'], description=item['description'])
+    return template('edit_item.tpl', id=item['id'], description=item['desc'])
 
 @post("/edit/<id>")
 def post_edit(id):
